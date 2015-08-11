@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DoMore:)</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <script src="bootstrap.min.js"></script>
+    <script src="jquery-2.1.0.min.js"></script>
+
+    <style>
+
+        .myclass{
+            color:seagreen;
+            font-size: 40px;
+        }
+        input{
+            width:400px;
+            height:30px;
+        }
+        p{
+            color:seagreen;
+        }
+        tr{
+            text-align: left;
+        }
+        td{
+            height: 30px;
+            font-size: 25px;
+        }
+        th{
+            text-align: left;
+            font-size: 25px;
+            height: 30px;
+        }
+
+        body {
+            font-family: Monospace;
+            background-color: #f0f0f0;
+            margin: 0px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<script src="three.min.js"></script>
+
+<script src="js/renderers/Projector.js"></script>
+<script src="js/renderers/CanvasRenderer.js"></script>
+
+<script src="js/libs/stats.min.js"></script>
+
+<script>
+
+    var container, stats;
+    var camera, scene, renderer;
+
+    var raycaster;
+    var mouse;
+
+    var PI2 = Math.PI * 2;
+
+    var programFill = function ( context ) {
+
+        context.beginPath();
+        context.arc( 0, 0, 0.5, 0, PI2, true );
+        context.fill();
+
+    }
+
+    var programStroke = function ( context ) {
+
+        context.lineWidth = 0.025;
+        context.beginPath();
+        context.arc( 0, 0, 0.5, 0, PI2, true );
+        context.stroke();
+
+    }
+
+    var INTERSECTED;
+
+    init();
+    animate();
+
+    function init() {
+
+        container = document.createElement( 'div' );
+        document.body.appendChild( container );
+
+        var info = document.createElement( 'h1' );
+        info.style.position = 'absolute';
+        info.style.top = '200px';
+        info.style.width = '100%';
+        info.style.fontSize='200px';
+        info.style.color='seagreen';
+        info.style.opacity='0.7';
+        info.style.textAlign = 'center';
+        info.innerHTML = 'DoMore:)';
+        container.appendChild( info );
+
+
+        var buttn = document.createElement( 'button' );
+        buttn.style.position = 'absolute';
+        buttn.style.top = '100px';
+        buttn.style.width = '15%';
+        buttn.style.fontSize='15px';
+        buttn.style.color='darkslategray';
+        buttn.setAttribute('class','btn btn-primary');
+        buttn.style.opacity='1.0';
+        buttn.style.textAlign = 'center';
+        buttn.innerHTML = 'GetStarted!!';
+        container.appendChild( buttn );
+
+        var firstask = document.createElement('div');
+        firstask.style.position='absolute';
+        firstask.setAttribute('class','myclass');
+        firstask.style.top = '100px';
+        firstask.style.width= '100%';
+        firstask.style.fontSize='15px';
+        firstask.style.textAlign='center';
+        firstask.style.opacity='0.8';
+        firstask.innerHTML='<p><div class="form-group"><label class="label" style="color:#2b542c;font-size: 30px;">SetGoals:</label><input class="form-group" id="frsttask" onfocus="if(this.value){this.value=null;}" style="height: 50px;font-size: 30px;background-color:#e4b9b9"></div></p>';
+
+        var buttnTwo = document.createElement('button');
+        buttnTwo.style.position='relative';
+        buttnTwo.style.float='left';
+        buttnTwo.style.marginTop='-78px';
+        buttnTwo.style.marginLeft='1025px';
+        buttnTwo.setAttribute('class','btn btn-primary');
+        buttnTwo.style.opacity='1.0';
+        buttnTwo.innerHTML = '<p style="color:darkslateblue";opacity="1";>SetGoal</p>';
+
+        var tasktable=document.createElement('div');
+        tasktable.setAttribute('class','tbl');
+        tasktable.innerHTML='<table class="table table-hover" align="center" style="background-color:lightpink"><tr><th id="bgoal" class="bg-danger">Broad Goal</th></tr><tr><td class="bg-info" id="firstele">Intermediate Goal One</td></tr><tr><td class="bg-info" id="secondele">Intermediate Goal Two</td></tr><tr><td id="thirdele" class="bg-info">Intermediate Goal Three</td></tr><tr><td id="fourthele" class="bg-info">Intermediate Goal Four</td></tr></table>';
+        tasktable.style.position='relative';
+        tasktable.style.display='block';
+        tasktable.style.width='50%';
+        tasktable.style.marginLeft='400px';
+
+
+
+        buttn.onclick = function(){
+
+
+
+            container.removeChild(info);
+            container.removeChild(buttn);
+            container.appendChild(firstask);
+            firstask.appendChild(buttnTwo);
+            firstask.appendChild(tasktable);
+
+
+
+
+
+
+
+        }
+
+        function func1(){
+            document.getElementById('bgoal').setAttribute('class','bg-success');
+            alert("REWARD YOURSELF");
+        }
+
+        var count=0;
+        buttnTwo.onclick = function(){
+
+            var var_frst=document.getElementById('frsttask').value;
+            if(count==0) {
+
+                document.getElementById('bgoal').innerHTML = var_frst+" "+"<button class='btn btn-danger' onclick='document.getElementById(\"bgoal\").setAttribute(\"class\",\"bg-success\");alert(\"Go and grab a Dress!! Look Its green on the Table!!\");document.getElementById(\"bgoal\").innerHTML=\"Completed(I am feeling Awesome)\";'>Check</button>";
+
+                count++;
+                return;
+            }
+            if(count==1){
+                document.getElementById('firstele').innerHTML = var_frst+" "+"<button class='btn btn-primary' onclick='document.getElementById(\"firstele\").setAttribute(\"class\",\"bg-success\");alert(\"Go and grab a Chocolate!! Look Its green on the Table!!\");document.getElementById(\"firstele\").innerHTML=\"Completed(chocolate sounds good)\";'>Check</button>";
+                count++;
+                return;
+            }
+            if(count==2){
+                document.getElementById('secondele').innerHTML = var_frst+" "+"<button class='btn btn-primary' onclick='document.getElementById(\"secondele\").setAttribute(\"class\",\"bg-success\");alert(\"Go and grab a Coffee!! Look Its green on the Table!!\");document.getElementById(\"secondele\").innerHTML=\"Completed(coffee time)\";'>Check</button>";
+                count++;
+                return;
+            }
+            if(count==3){
+                document.getElementById('thirdele').innerHTML = var_frst+" "+"<button class='btn btn-primary' onclick='document.getElementById(\"thirdele\").setAttribute(\"class\",\"bg-success\");alert(\"Go and grab a Cola!! Look Its green on the Table!!\");document.getElementById(\"thirdele\").innerHTML=\"Completed(Phew!Its Done)\";'>Check</button>";
+                count++;
+                return;
+            }
+            if(count==4){
+                document.getElementById('fourthele').innerHTML = var_frst+" "+"<button class='btn btn-primary' onclick='document.getElementById(\"fourthele\").setAttribute(\"class\",\"bg-success\");alert(\"Go and grab a Candy!! Look Its green on the Table!!\");document.getElementById(\"fourthele\").innerHTML=\"Completed(I can do more.)\";'>Check</button>";
+                count++;
+                return;
+            }
+            if(count>=5){
+
+                alert("Complete Current Goals!!");
+                return;
+            }
+
+        }
+
+
+
+
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+        camera.position.set( 0, 300, 500 );
+
+        scene = new THREE.Scene();
+
+        for ( var i = 0; i < 100; i ++ ) {
+
+            var particle = new THREE.Sprite( new THREE.SpriteCanvasMaterial( { color: Math.random() * 0x808080 + 0x808080, program: programStroke } ) );
+            particle.position.x = Math.random() * 800 - 400;
+            particle.position.y = Math.random() * 800 - 400;
+            particle.position.z = Math.random() * 800 - 400;
+            particle.scale.x = particle.scale.y = Math.random() * 20 + 20;
+            scene.add( particle );
+
+        }
+
+        //
+
+        raycaster = new THREE.Raycaster();
+        mouse = new THREE.Vector2();
+
+        renderer = new THREE.CanvasRenderer();
+        renderer.setClearColor( 0xf0f0f0 );
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        container.appendChild( renderer.domElement );
+
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.top = '0px';
+       // container.appendChild( stats.domElement ); closing the stats bar
+
+        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+        //
+
+        window.addEventListener( 'resize', onWindowResize, false );
+
+    }
+
+    function onWindowResize() {
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+    }
+
+    function onDocumentMouseMove( event ) {
+
+        event.preventDefault();
+
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    }
+
+    //
+
+    function animate() {
+
+        requestAnimationFrame( animate );
+
+        render();
+        stats.update();
+
+    }
+
+    var radius = 600;
+    var theta = 0;
+
+    function render() {
+
+        // rotate camera
+
+        theta += 0.1;
+
+        camera.position.x = radius * Math.sin( THREE.Math.degToRad( theta ) );
+        camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
+        camera.position.z = radius * Math.cos( THREE.Math.degToRad( theta ) );
+        camera.lookAt( scene.position );
+
+        camera.updateMatrixWorld();
+
+        // find intersections
+
+        raycaster.setFromCamera( mouse, camera );
+
+        var intersects = raycaster.intersectObjects( scene.children );
+
+        if ( intersects.length > 0 ) {
+
+            if ( INTERSECTED != intersects[ 0 ].object ) {
+
+                if ( INTERSECTED ) INTERSECTED.material.program = programStroke;
+
+                INTERSECTED = intersects[ 0 ].object;
+                INTERSECTED.material.program = programFill;
+
+            }
+
+        } else {
+
+            if ( INTERSECTED ) INTERSECTED.material.program = programStroke;
+
+            INTERSECTED = null;
+
+        }
+
+        renderer.render( scene, camera );
+
+    }
+
+</script>
+
+</body>
+</html>
