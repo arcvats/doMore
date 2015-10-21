@@ -18,4 +18,4 @@ Scope:
 2.Works only on Mouse Clicks(does not work for key presses)
 
 #Safari and Chrome compatible
-hello
+hello world
